@@ -4,7 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include <cassert> 
-#include <half.hpp>
+#include <half/half.hpp>
 
 using float16 = half_float::half; 
 

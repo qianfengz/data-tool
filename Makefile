@@ -1,4 +1,4 @@
-HIPCC=/opt/rocm/hip/bin/hipcc
+HIPCC=/usr/bin/hipcc
 
 LDFLAGS :=
 CXXFLAGS := -I/opt/rocm/include --offload-arch=gfx90a -std=c++17
