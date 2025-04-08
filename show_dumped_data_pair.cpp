@@ -53,14 +53,14 @@ bool readBufferFromFile(T* data, size_t dataNumItems, const std::string& fileNam
 int main(int argc, char *argv[])
 {
      if ( argc != 5 ) {
-          std::cerr << "Usage: " << argv[0] << " <fp64/fp32/fp16/bp16/int32/int16/int8/uint32/uint16/uint8> <file1> <file2> <number of elements> " << std::endl; 
+          std::cerr << "Usage: " << argv[0] << " <fp64/fp32/fp16/bf16/int32/int16/int8/uint32/uint16/uint8> <file1> <file2> <number of elements> " << std::endl; 
 
 	  throw std::runtime_error("Invalid command argument!"); 
      }; 
 
      std::string precision(argv[1]); 
 
-     if (precision != "fp64" && precision != "fp32" && precision != "fp16" && precision != "bp16" && precision != "int8" && precision != "int32" 
+     if (precision != "fp64" && precision != "fp32" && precision != "fp16" && precision != "bf16" && precision != "int8" && precision != "int32" 
 		     && precision != "int16" && precision != "uint32" && precision != "uint16" && precision != "uint8") 
 	  throw std::runtime_error("Invalid precison of input data specified!"); 
 
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
          delete [] dataBuffer2;
      }
      else 
-     if ( precision == "bp16") {
+     if ( precision == "bf16") {
          bhalf_t *dataBuffer1 = new bhalf_t[numElements];
          bhalf_t *dataBuffer2 = new bhalf_t[numElements];
 
