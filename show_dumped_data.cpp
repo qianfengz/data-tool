@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <string>
 #include <stdexcept>
-#include <cassert> 
+#include <cassert>
 #include <type_traits>
 
 #include "type_convert.hpp"
@@ -20,157 +20,116 @@ bool readBufferFromFile(T* data, size_t dataNumItems, const std::string& fileNam
     }
     else
     {
-        throw std::runtime_error("could not open the file for reading");  
+        throw std::runtime_error("could not open the file for reading");
     }
 
     return true;
 }
 
-int main(int argc, char *argv[])
+template <typename T>
+void show_integer_data_from_file(int numElements, const char* filename)
 {
-     if ( argc != 4 ) {
-          std::cerr << "Usage: " << argv[0] << " <fp64/fp32/fp16/bf16/int32/int16/int8/uint32/uint16/uint8> <file> <number of elements> " << std::endl; 
+    T* dataBuffer = new T[numElements];
 
-	  throw std::runtime_error("Invalid command argument!"); 
-     }; 
+    if(readBufferFromFile(dataBuffer, numElements, filename))
+    {
+        for(int i = 0; i < numElements; i++)
+        {
+            if constexpr(sizeof(T) >= 2)
+                std::cout << i << " : " << dataBuffer[i] << std::endl;
+            else
+                std::cout << i << " : " << static_cast<int>(dataBuffer[i]) << std::endl;
+        };
+    };
 
-     std::string precision(argv[1]); 
+    delete[] dataBuffer;
+};
 
-     if (precision != "fp64" && precision != "fp32" && precision != "fp16" && precision != "bf16" && precision != "int8" && precision != "int32" 
-		     && precision != "int16" && precision != "uint32" && precision != "uint16" && precision != "uint8") 
-	  throw std::runtime_error("Invalid precison of input data specified!"); 
+template <typename T>
+void show_floating_point_data_from_file(int numElements, const char* filename)
+{
+    T* dataBuffer = new T[numElements];
 
-     int numElements = atoi(argv[3]); 
+    if(readBufferFromFile(dataBuffer, numElements, filename))
+    {
+        for(int i = 0; i < numElements; i++)
+        {
+            float value = type_convert<float>(dataBuffer[i]);
 
-     assert( numElements > 0 ); 
+            if(std::isinf(value) || std::isnan(value))
+            {
+                std::cout << i << " : "
+                          << "invalid value" << std::endl;
+                continue;
+            }
+            std::cout << i << " : " << std::fixed << value << std::endl;
+        };
+    };
 
-     if ( precision == "fp64" ) {
-         double *dataBuffer = new double[numElements]; 
+    delete[] dataBuffer;
+};
 
-	 if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++) {
-                   if ( std::isinf(dataBuffer[i]) || std::isnan(dataBuffer[i]) ) 
-                        std::cout << i << " : " << "invalid value" << std::endl;
-                   else 
-                        std::cout << i << " : " << std::fixed << dataBuffer[i] << std::endl;
-              };
-         };  
+int main(int argc, char* argv[])
+{
+    if(argc != 4)
+    {
+        std::cerr << "Usage: " << argv[0]
+                  << " <fp64/fp32/fp16/bf16/int32/int16/int8/uint32/uint16/uint8> <file> <number "
+                     "of elements> "
+                  << std::endl;
 
-         delete [] dataBuffer;
-     }
-     else
-     if ( precision == "fp32" ) {
-         float *dataBuffer = new float[numElements]; 
+        throw std::runtime_error("Invalid command argument!");
+    };
 
-	 if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++) {
-                   if ( std::isinf(dataBuffer[i]) || std::isnan(dataBuffer[i]) ) 
-                        std::cout << i << " : " << "invalid value" << std::endl;
-                   else 
-                        std::cout << i << " : " << std::fixed << dataBuffer[i] << std::endl;
-              };
-         };  
+    std::string precision(argv[1]);
 
-         delete [] dataBuffer;
-     }
-     else 
-     if ( precision == "fp16" ) {
-         half_t *dataBuffer = new half_t[numElements];
+    if(precision != "fp64" && precision != "fp32" && precision != "fp16" && precision != "bf16" &&
+       precision != "int8" && precision != "int32" && precision != "int16" &&
+       precision != "uint32" && precision != "uint16" && precision != "uint8")
+        throw std::runtime_error("Invalid precison of input data specified!");
 
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++) {
-                   if ( std::isinf(dataBuffer[i]) || std::isnan(dataBuffer[i]) ) 
-                        std::cout << i << " : " << "invalid value" << std::endl;
-                   else 
-                        std::cout << i << " : " << std::fixed << dataBuffer[i] << std::endl;
-              };
-         };
+    int numElements = atoi(argv[3]);
 
-         delete [] dataBuffer; 
-     }
-     else 
-     if ( precision == "bf16") {
-         bhalf_t *dataBuffer = new bhalf_t[numElements];
+    assert(numElements > 0);
 
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++) {
-                   float value = type_convert<float>(dataBuffer[i]); 
-
-                   if ( std::isinf(value) || std::isnan(value) )
-                        std::cout << i << " : " << "invalid value" << std::endl;
-                   else
-                        std::cout << i << " : " << std::fixed << value << std::endl;
-              };
-         };
-
-         delete [] dataBuffer;
-     }
-     else
-     if ( precision == "int32" ) {
-         int32_t *dataBuffer = new int32_t[numElements];
-
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++)
-                   std::cout << i << " : " << dataBuffer[i] << std::endl;
-         };
-
-         delete [] dataBuffer;
-     }
-     else
-     if ( precision == "uint32" ) {
-         uint32_t *dataBuffer = new uint32_t[numElements];
-
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++)
-                   std::cout << i << " : " << dataBuffer[i] << std::endl;
-         };
-
-         delete [] dataBuffer;
-     }
-     else
-     if ( precision == "int16" ) {
-         int16_t *dataBuffer = new int16_t[numElements];
-
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++)
-                   std::cout << i << " : " << dataBuffer[i] << std::endl;
-         };
-
-         delete [] dataBuffer;
-     }
-     else
-     if ( precision == "uint16" ) {
-         uint16_t *dataBuffer = new uint16_t[numElements];
-
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++)
-                   std::cout << i << " : " << dataBuffer[i] << std::endl;
-         };
-
-         delete [] dataBuffer;
-     }
-     else
-     if ( precision == "int8" ) {
-         int8_t *dataBuffer = new int8_t[numElements];
-
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++)
-                   std::cout << i << " : " << static_cast<int>(dataBuffer[i]) << std::endl;
-         };
-
-         delete [] dataBuffer;
-     }
-     else
-     if ( precision == "uint8" ) {
-         uint8_t *dataBuffer = new uint8_t[numElements];
-
-         if ( readBufferFromFile(dataBuffer, numElements, argv[2]) ) {
-              for (int i=0; i < numElements; i++)
-                   std::cout << i << " : " << static_cast<int>(dataBuffer[i]) << std::endl;
-         };
-
-         delete [] dataBuffer;
-     }
-}; 
-
-
+    if(precision == "fp64")
+    {
+        show_floating_point_data_from_file<double>(numElements, argv[2]);
+    }
+    else if(precision == "fp32")
+    {
+        show_floating_point_data_from_file<float>(numElements, argv[2]);
+    }
+    else if(precision == "fp16")
+    {
+        show_floating_point_data_from_file<half_t>(numElements, argv[2]);
+    }
+    else if(precision == "bf16")
+    {
+        show_floating_point_data_from_file<bhalf_t>(numElements, argv[2]);
+    }
+    else if(precision == "int32")
+    {
+        show_integer_data_from_file<int32_t>(numElements, argv[2]);
+    }
+    else if(precision == "uint32")
+    {
+        show_integer_data_from_file<uint32_t>(numElements, argv[2]);
+    }
+    else if(precision == "int16")
+    {
+        show_integer_data_from_file<int16_t>(numElements, argv[2]);
+    }
+    else if(precision == "uint16")
+    {
+        show_integer_data_from_file<uint16_t>(numElements, argv[2]);
+    }
+    else if(precision == "int8")
+    {
+        show_integer_data_from_file<int8_t>(numElements, argv[2]);
+    }
+    else if(precision == "uint8")
+    {
+        show_integer_data_from_file<uint8_t>(numElements, argv[2]);
+    }
+};
