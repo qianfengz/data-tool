@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
    if ( argc < 5) {
-        std::cout << "Usage: " << argv[0] << "<fp32/fp16/bp16> <file1> <file2> <number of data> <1/0 show accumulation>" << std::endl; 
+        std::cout << "Usage: " << argv[0] << "<fp32/fp16/bf16> <file1> <file2> <number of data> <1/0 show accumulation>" << std::endl; 
 	throw std::runtime_error("Invalid argument!"); 
    }
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 	  data2_conved = data2; 
        }
        else 
-       if (precision == "bp16") {
+       if (precision == "bf16") {
            bhalf_t val1 = type_convert<bhalf_t>(data1); 
            bhalf_t val2 = type_convert<bhalf_t>(data2); 
 
