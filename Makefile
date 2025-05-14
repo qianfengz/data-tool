@@ -1,9 +1,9 @@
 HIPCC=/usr/bin/hipcc
 
 LDFLAGS :=
-CXXFLAGS := -I/opt/rocm/include --offload-arch=gfx90a -std=c++17
+CXXFLAGS := -I/opt/rocm/include -std=c++17
 
-HIP_PROGRAMS := average dump_buffer show_dumped_data show_dumped_data_pair show_data_pair do_product_from_file set_float_data
+HIP_PROGRAMS := average dump_buffer show_dumped_data show_dumped_data_pair show_data_pair do_product_from_file set_float_data show_dumped_tensor
 
 all: $(HIP_PROGRAMS)
 
@@ -19,6 +19,9 @@ show_dumped_data: show_dumped_data.o
 	$(HIPCC)  -o $@  $^   $(LDFLAGS) 
 
 show_dumped_data_pair: show_dumped_data_pair.o
+	$(HIPCC)  -o $@  $^   $(LDFLAGS) 
+
+show_dumped_tensor: show_dumped_tensor.o
 	$(HIPCC)  -o $@  $^   $(LDFLAGS) 
 
 show_data_pair: show_data_pair.o
