@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <half/half.hpp>
 
-using half_t = half_float::half; 
+using half_t  = half_float::half;
 using bhalf_t = ushort;
 
 // Convert X to Y
@@ -40,3 +40,27 @@ constexpr bhalf_t type_convert<bhalf_t, float>(float x)
     return uint16_t(u.int32 >> 16);
 }
 
+// convert bfp16 to fp32
+template <>
+constexpr double type_convert<double, bhalf_t>(bhalf_t x)
+{
+    union
+    {
+        uint32_t int32;
+        float fp32;
+    } u = {uint32_t(x) << 16};
+
+    return static_cast<double>(u.fp32);
+}
+
+template <>
+constexpr bhalf_t type_convert<bhalf_t, double>(double x)
+{
+    union
+    {
+        float fp32;
+        uint32_t int32;
+    } u = {static_cast<float>(x)};
+
+    return uint16_t(u.int32 >> 16);
+}
