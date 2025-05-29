@@ -61,6 +61,8 @@ void show_floating_point_data_pair_from_file(int numElements,
     if(readBufferFromFile(dataBuffer1, numElements, filename1) &&
        readBufferFromFile(dataBuffer2, numElements, filename2))
     {
+        std::cout << std::fixed << std::setprecision(11);
+
         for(int i = 0; i < numElements; i++)
         {
             float value1 = type_convert<float>(dataBuffer1[i]);
@@ -78,7 +80,7 @@ void show_floating_point_data_pair_from_file(int numElements,
                 continue;
             };
 
-            std::cout << i << " : " << std::fixed << value1 << " " << value2 << std::endl;
+            std::cout << i << ":  " << value1 << "    " << value2 << std::endl;
         };
     };
 

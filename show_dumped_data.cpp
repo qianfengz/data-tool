@@ -52,6 +52,7 @@ void show_floating_point_data_from_file(int numElements, const char* filename)
 
     if(readBufferFromFile(dataBuffer, numElements, filename))
     {
+        std::cout << std::fixed << std::setprecision(11);
         for(int i = 0; i < numElements; i++)
         {
             float value = type_convert<float>(dataBuffer[i]);
@@ -62,7 +63,7 @@ void show_floating_point_data_from_file(int numElements, const char* filename)
                           << "invalid value" << std::endl;
                 continue;
             }
-            std::cout << i << " : " << std::fixed << value << std::endl;
+            std::cout << i << ":   " << value << std::endl;
         };
     };
 
