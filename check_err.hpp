@@ -19,7 +19,7 @@ namespace data_tool {
 
 template <typename T>
 bool check_err(
-    const T* out, const T* ref, int num_elements, const std::string& msg, double rtol, double atol)
+    const T* out, const T* ref, int num_elements, const std::string& msg, double atol, double rtol)
 {
     const auto is_infinity_error = [=](auto o, auto r) {
         const bool either_not_finite = !std::isfinite(o) || !std::isfinite(r);
