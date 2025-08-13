@@ -3,7 +3,7 @@ HIPCC=/usr/bin/hipcc
 LDFLAGS :=
 CXXFLAGS := -I/opt/rocm/include -std=c++17
 
-HIP_PROGRAMS := average dump_buffer show_dumped_data show_dumped_data_pair show_data_pair do_product_from_file set_float_data show_dumped_tensor compare_dumped_data_pair
+HIP_PROGRAMS := average dump_buffer show_dumped_data show_dumped_data_pair show_data_pair do_product_from_file set_float_data show_dumped_tensor compare_dumped_data_pair check_bf16_data
 
 all: $(HIP_PROGRAMS)
 
@@ -36,6 +36,8 @@ set_float_data: set_float_data.o
 compare_dumped_data_pair: compare_dumped_data_pair.o
 	$(HIPCC)  -o $@  $^   $(LDFLAGS) 
 
+check_bf16_data: check_bf16_data.o
+	$(HIPCC)  -o $@  $^   $(LDFLAGS) 
 
 %.o: %.cpp
 	$(HIPCC) $(CXXFLAGS) -c $^  -o $@ 
