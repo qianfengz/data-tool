@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     float rel_error = abs_error / std::abs(dot_prod_first);
 
     std::cout << "Dot-product using fp32: " << dot_prod_first << std::endl
-              << "Dot-produt using bf16: " << dot_prod_second << std::endl
+              << "Dot-product using bf16: " << dot_prod_second << std::endl
               << "Abs_error: " << abs_error << std::endl
               << "Rel_error: " << rel_error << std::endl;
 };
