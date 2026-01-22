@@ -79,9 +79,9 @@ void show_integer_tensor_from_file(
                     for(int i_seq2 = 0; i_seq2 < seqlen2; i_seq2++)
                     {
                         if constexpr(sizeof(T) >= 2)
-                            std::cout << pData[i_seq1 * seqlen1 + i_seq2] << " ";
+                            std::cout << pData[i_seq1 * seqlen2 + i_seq2] << " ";
                         else
-                            std::cout << static_cast<int>(pData[i_seq1 * seqlen1 + i_seq2]) << " ";
+                            std::cout << static_cast<int>(pData[i_seq1 * seqlen2 + i_seq2]) << " ";
                     };
 
                     std::cout << std::endl;
@@ -104,9 +104,9 @@ void show_integer_tensor_from_file(
                 for(int i_seq2 = 0; i_seq2 < seqlen2; i_seq2++)
                 {
                     if constexpr(sizeof(T) >= 2)
-                        std::cout << pData[i_seq1 * seqlen1 + i_seq2] << " ";
+                        std::cout << pData[i_seq1 * seqlen2 + i_seq2] << " ";
                     else
-                        std::cout << static_cast<int>(pData[i_seq1 * seqlen1 + i_seq2]) << " ";
+                        std::cout << static_cast<int>(pData[i_seq1 * seqlen2 + i_seq2]) << " ";
                 };
 
                 std::cout << std::endl;
@@ -143,9 +143,9 @@ void show_floating_point_tensor_from_file(
                     for(int i_seq2 = 0; i_seq2 < seqlen2; i_seq2++)
                     {
                         if constexpr(sizeof(T) >= 2)
-                            std::cout << pData[i_seq1 * seqlen1 + i_seq2] << " ";
+                            std::cout << pData[i_seq1 * seqlen2 + i_seq2] << " ";
                         else
-                            std::cout << static_cast<int>(pData[i_seq1 * seqlen1 + i_seq2]) << " ";
+                            std::cout << static_cast<int>(pData[i_seq1 * seqlen2 + i_seq2]) << " ";
                     };
 
                     std::cout << std::endl;
@@ -170,9 +170,9 @@ void show_floating_point_tensor_from_file(
                 for(int i_seq2 = 0; i_seq2 < seqlen2; i_seq2++)
                 {
                     if constexpr(sizeof(T) >= 2)
-                        std::cout << pData[i_seq1 * seqlen1 + i_seq2] << " ";
+                        std::cout << pData[i_seq1 * seqlen2 + i_seq2] << " ";
                     else
-                        std::cout << static_cast<int>(pData[i_seq1 * seqlen1 + i_seq2]) << " ";
+                        std::cout << static_cast<int>(pData[i_seq1 * seqlen2 + i_seq2]) << " ";
                 };
 
                 std::cout << std::endl;
